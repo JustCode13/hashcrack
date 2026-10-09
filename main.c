@@ -2,6 +2,13 @@
 #include <string.h>
 #include <unistd.h>
 
+static char *hash_mode = NULL;
+static char *attack_mode = NULL;
+static char *target_hash = NULL;
+static char *wordlist_filename = NULL;
+static char *character_set = NULL;
+static char *progress = NULL;
+
 int validate_argument(char *hash_mode, char *attack_mode);
 
 int main(int argc, char *argv[]) {
