@@ -7,7 +7,7 @@ static char *attack_mode = NULL;
 static char *target_hash = NULL;
 static char *wordlist_filename = NULL;
 static char *character_set = NULL;
-static char *progress = NULL;
+static char *progress = "Running";
 
 int validate_arguments(char *hash_mode, char *attack_mode);
 
@@ -37,12 +37,6 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    printf("file: %s\n", argv[0]);
-    printf("%s\n", hash_mode);
-    printf("%s\n", attack_mode);
-    printf("hash file: %s\n", argv[optind]);
-    printf("wordlist: %s\n", argv[optind + 1]);
-
     if (validate_arguments(hash_mode, attack_mode) != 0) {
         return -1;
     }
@@ -54,6 +48,14 @@ int main(int argc, char *argv[]) {
     } else {
         character_set = argv[optind];
     }
+
+    printf("file: %s\n", argv[0]);
+    printf("%s\n", hash_mode);
+    printf("%s\n", attack_mode);
+    printf("hash file: %s\n", target_hash);
+    printf("wordlist: %s\n",
+           wordlist_filename == NULL ? character_set : wordlist_filename);
+    printf("progress: %s\n", progress);
 
     return 0;
 }
