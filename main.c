@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <fcntl.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -18,6 +19,8 @@ int validate_arguments(char *hash_mode, char *attack_mode);
 int open_file(char *file_name);
 
 int read_file(int file_fd, char *output, size_t output_size);
+
+int validate_hash(void);
 
 int main(int argc, char *argv[]) {
     int opt;
@@ -87,6 +90,10 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
+    if (validate_hash() != 0) {
+        return -1;
+    }
+
     printf("target hash: %s", target_hash);
 
     return 0;
@@ -130,6 +137,31 @@ int read_file(int file_fd, char *output, size_t output_size) {
     if (bytes_read < 1) {
         perror("read");
         return -1;
+    }
+
+    return 0;
+}
+
+int validate_hash(void) {
+
+    if (strcmp(hash_mode, "0")) {
+        if (sizeof(target_hash) != 33) {
+            printf("Error: Invalid Hash %s\n", target_hash);
+            return -1;
+        }
+
+    } else {
+        if (sizeof(target_hash) != 41) {
+            printf("Error: Invalid Hash %s\n", target_hash);
+            return -1;
+        }
+    }
+
+    for (size_t i = 0; i < sizeof(target_hash); i++) {
+        if (!isxdigit(target_hash[i]) && target_hash[i] != '\0') {
+            printf("Error: Invalid Hash %c\n", target_hash[i]);
+            return -1;
+        }
     }
 
     return 0;
