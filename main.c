@@ -9,12 +9,12 @@ static char *wordlist_filename = NULL;
 static char *character_set = NULL;
 static char *progress = NULL;
 
-int validate_argument(char *hash_mode, char *attack_mode);
+int validate_arguments(char *hash_mode, char *attack_mode);
 
 int main(int argc, char *argv[]) {
     int opt;
-    char *hash_mode = NULL;
-    char *attack_mode = NULL;
+    hash_mode = NULL;
+    attack_mode = NULL;
 
     while ((opt = getopt(argc, argv, "m:a:")) != -1) {
         switch (opt) {
@@ -43,14 +43,22 @@ int main(int argc, char *argv[]) {
     printf("hash file: %s\n", argv[optind]);
     printf("wordlist: %s\n", argv[optind + 1]);
 
-    if (validate_argument(hash_mode, attack_mode) != 0) {
+    if (validate_arguments(hash_mode, attack_mode) != 0) {
         return -1;
+    }
+
+    target_hash = argv[optind];
+
+    if (strcmp(attack_mode, "0") == 0) {
+        wordlist_filename = argv[optind];
+    } else {
+        character_set = argv[optind];
     }
 
     return 0;
 }
 
-int validate_argument(char *hash_mode, char *attack_mode) {
+int validate_arguments(char *hash_mode, char *attack_mode) {
     if (strcmp(hash_mode, "0") != 0 && strcmp(hash_mode, "100") != 0) {
         printf("Error: Invalid Hash Mode: %s\n", hash_mode);
         return -1;
