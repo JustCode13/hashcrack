@@ -1,3 +1,4 @@
+#include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -72,4 +73,15 @@ int validate_arguments(char *hash_mode, char *attack_mode) {
     }
 
     return 0;
+}
+
+int open_file(char *file_name) {
+    int fd = open(file_name, O_RDONLY);
+
+    if (fd == -1) {
+        perror("Open:");
+        return -1;
+    }
+
+    return fd;
 }
